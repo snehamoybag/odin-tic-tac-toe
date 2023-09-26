@@ -15,6 +15,7 @@ const Player = (name, marker) => {
       _currentCombo += val;
     }
   };
+
   const getCurrentCombo = () => _currentCombo;
 
   return {
@@ -33,8 +34,10 @@ const Cell = (row, column) => {
   const take = () => {
     _isTaken = take;
   };
+
   const getValue = () => _value;
   const getTakenStatus = () => _isTaken;
+
   const setMarker = (marker) => {
     _marker = marker;
   };
@@ -65,12 +68,15 @@ const GameBoard = () => {
 
     _board = freshBoard;
   };
+
   const get = () => _board;
   const getCellValue = (row, column) => _board[row][column].getValue();
+
   const placeMarker = (row, column, marker) => {
     _board[row][column].take();
     _board[row][column].setMarker(marker);
   };
+
   const getFilledStatus = () => {
     let isBoardFilled = true;
 
@@ -104,37 +110,55 @@ const GameController = (player1, player2) => {
   let _currentPlayer = player1;
 
   const getCurrentPlayer = () => _currentPlayer;
-  const switchPlayer = () => {
+
+  const _switchPlayer = () => {
     _currentPlayer = _currentPlayer === player1 ? player2 : player1;
   };
+
   const _getWinner = () => {
     const winCombos = ["012", "000", "111", "222"];
     if (winCombos.includes(_currentPlayer.getCurrentCombo()))
       return _currentPlayer;
   };
-  const checkWin = () => {
-    const isBoardFilled = _gameBoard.getFilledStatus();
-    const winner = _getWinner();
 
-    if (winner) return true;
-    if (isBoardFilled && !winner) return false;
+  const _checkWin = () => {
+    const winner = _getWinner();
+    return winner === true;
   };
+
   const playRound = (row, column) => {
-    // before playing a round check if board is filled or not
-    // if filled return immediately
+    let roundResult = "";
     const isBoardFilled = _gameBoard.getFilledStatus();
     const isCellAvailable = _gameBoard[row][column].getTakenStatus();
 
-    if (isBoardFilled || !isCellAvailable) return;
+    if (isBoardFilled) {
+      roundResult = "match tied";
+      return roundResult;
+    }
+
+    if (!isCellAvailable) {
+      roundResult = "cell already taken";
+      return roundResult;
+    }
 
     _gameBoard.placeMarker(row, column, _currentPlayer.marker);
+    _currentPlayer.setCurrentCombo(column);
+    const isWin = _checkWin();
+
+    if (!isWin) {
+      _switchPlayer();
+      roundResult = "round complete";
+      return roundResult;
+    } else {
+      roundResult = "win";
+      return roundResult;
+    }
   };
 
   return {
-    getCurrentPlayer,
-    switchPlayer,
-    checkWin,
     getGameBoard: _gameBoard.get(),
+    getCurrentPlayer,
+    playRound,
   };
 };
 
@@ -147,6 +171,7 @@ const ScreenController = () => {
     const gameBoard = _gameController.getGameBoard();
     console.log(gameBoard);
   };
+
   const renderEndScreen = (containerEl, msgEl, restartBtnEl) => {
     console.log("The winner is " + _gameController.getCurrentPlayer());
   };
