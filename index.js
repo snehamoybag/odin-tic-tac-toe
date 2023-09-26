@@ -156,13 +156,13 @@ const GameController = (player1, player2) => {
   };
 
   return {
-    getGameBoard: _gameBoard.get(),
+    getGameBoard: _gameBoard.get,
     getCurrentPlayer,
     playRound,
   };
 };
 
-const ScreenController = () => {
+const DisplayController = (player1, player2) => {
   const _player1 = Player("Snehamoy", "X");
   const _player2 = Player("Futuman", "O");
   const _gameController = GameController(_player1, _player2);
@@ -177,7 +177,7 @@ const ScreenController = () => {
   };
 
   return {
-    renderGameBoard,
-    renderEndScreen,
+    gameBoard: renderGameBoard,
+    endScreen: renderEndScreen,
   };
 };
