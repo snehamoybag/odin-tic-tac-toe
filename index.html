@@ -29,9 +29,36 @@
       </div>
     </header>
     <main>
-      <div id="welcome-screen" class="welcome-screen"></div>
-      <div id="game-board" class="game-board"></div>
-      <div id="end-screen" class="end-screen hidden"></div>
+      <div class="container">
+        <dialog id="welcome-screen" class="welcome-screen">
+          <h2 class="welcome-screen__title">Please Select Marker</h2>
+          <p class="welcome-screen__markers-wrapper">
+            <label for="marker-x">
+              <span class="sr-only">cross</span>
+              <input
+                type="radio"
+                name="marker"
+                id="marker-x"
+                value="x"
+                checked
+              />
+            </label>
+            <label for="marker-o">
+              <span class="sr-only">circle</span>
+              <input type="radio" name="marker" id="marker-o" value="o" />
+            </label>
+          </p>
+          <button
+            type="button"
+            id="start-game"
+            class="welcome-screen__start-btn"
+          >
+            Start Game
+          </button>
+        </dialog>
+        <div id="game-board" class="game-board"></div>
+        <div id="end-screen" class="end-screen hidden"></div>
+      </div>
     </main>
     <footer></footer>
   </body>

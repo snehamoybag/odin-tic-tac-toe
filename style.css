@@ -1,6 +1,9 @@
 :root {
   /* hsl color space */
+  --clr-primary-400: 218, 45%, 50%;
   --clr-primary-700: 218, 45%, 22%;
+
+  --clr-neutral-100: 0, 0%, 100%;
 
   --ff-primary: "Poppins", sans-serif;
 
@@ -29,6 +32,12 @@ svg {
   display: block;
 }
 
+input,
+textarea,
+button {
+  font: inherit;
+}
+
 header {
   padding: 2em 1em;
   border-bottom: 2px solid hsl(var(--clr-primary-700));
@@ -49,4 +58,55 @@ header {
   font-size: 2rem;
   font-weight: var(--fw-semi-bold);
   white-space: nowrap;
+}
+
+.container {
+  /* position: relative; */
+}
+
+.welcome-screen {
+  min-width: 250px;
+  text-align: center;
+  color: inherit; /* inherit body color */
+  padding: 1.5em;
+  border: 1px solid hsl(var(--clr-primary-700));
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px hsla(0, 0%, 0%, 0.1);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* all direct children except for the first */
+.welcome-screen > * + * {
+  margin-top: 0.75rem;
+}
+
+.welcome-screen::backdrop {
+  background: hsla(0, 0%, 0%, 0.5);
+}
+
+.welcome-screen__title {
+  line-height: 1;
+}
+
+.welcome-screen__start-btn {
+  padding: 0.75em 1.75em;
+  background-color: hsl(var(--clr-primary-400));
+  color: hsla(var(--clr-neutral-100));
+  font-weight: var(--fw-semi-bold);
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 5px 5px hsla(0, 0%, 0%, 0.1);
+  translate: transform 200ms ease;
+}
+
+.welcome-screen__start-btn:hover {
+  cursor: pointer;
+  filter: opacity(0.9);
+}
+
+.welcome-screen__start-btn:active {
+  transform: scale(0.97);
+  box-shadow: none;
 }
