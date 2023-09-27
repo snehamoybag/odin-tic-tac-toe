@@ -1,0 +1,52 @@
+:root {
+  /* hsl color space */
+  --clr-primary-700: 218, 45%, 22%;
+
+  --ff-primary: "Poppins", sans-serif;
+
+  --fw-regular: 400;
+  --fw-semi-bold: 600;
+  --fw-bold: 700;
+}
+
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--ff-primary);
+  font-size: 1rem;
+  color: hsl(var(--clr-primary-700));
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+header {
+  padding: 2em 1em;
+  border-bottom: 2px solid hsl(var(--clr-primary-700));
+  box-shadow: 0 7px 10px hsla(0, 0%, 0%, 0.1);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo__img {
+  width: 1.5rem;
+}
+
+.logo__title {
+  font-size: 2rem;
+  font-weight: var(--fw-semi-bold);
+  white-space: nowrap;
+}
