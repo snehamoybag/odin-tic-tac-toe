@@ -33,19 +33,26 @@
         <dialog id="welcome-screen" class="welcome-screen">
           <h2 class="welcome-screen__title">Please Select Marker</h2>
           <p class="welcome-screen__markers-wrapper">
-            <label for="marker-x">
+            <label for="marker-cross" class="marker marker--cross">
               <span class="sr-only">cross</span>
               <input
                 type="radio"
                 name="marker"
-                id="marker-x"
+                id="marker-cross"
                 value="x"
+                class="marker__radio"
                 checked
               />
             </label>
-            <label for="marker-o">
+            <label for="marker-circle" class="marker marker--circle">
               <span class="sr-only">circle</span>
-              <input type="radio" name="marker" id="marker-o" value="o" />
+              <input
+                type="radio"
+                name="marker"
+                id="marker-circle"
+                value="o"
+                class="marker__radio"
+              />
             </label>
           </p>
           <button
