@@ -68,7 +68,10 @@ header {
 }
 
 .container {
-  /* position: relative; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
 .welcome-screen {
@@ -108,7 +111,7 @@ header {
   border: none;
   border-radius: 5px;
   box-shadow: 0 5px 5px hsla(0, 0%, 0%, 0.1);
-  translate: transform 200ms ease;
+  transition: transform 200ms ease;
   margin-top: 1.5rem;
 }
 
@@ -120,6 +123,21 @@ header {
 .welcome-screen__start-btn:active {
   transform: scale(0.97);
   box-shadow: none;
+}
+
+.game-board {
+  --size: 300px;
+  width: var(--size);
+  height: var(--size);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.game-board__cell {
+  background-color: transparent;
+  padding: 0;
+  border: 2px solid hsl(var(--clr-primary-700));
 }
 
 .marker {

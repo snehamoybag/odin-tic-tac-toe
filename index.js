@@ -1,10 +1,3 @@
-// show board on start
-// get players
-// player can select certain cells to place their marker
-// check for  win or draw after player plays their turn
-// show win/draw message if  win/draw found
-// end game after win/draw
-// if no win/draw swith turn to other player
 const Player = (name, marker) => {
   let _currentCombo = "";
 
@@ -162,22 +155,49 @@ const GameController = (player1, player2) => {
   };
 };
 
-const DisplayController = (player1, player2) => {
+const UIController = () => {
+  const welcomeScreenModal = document.querySelector("#welcome-screen");
+  document.addEventListener("click", () => welcomeScreenModal.showModal());
   const _player1 = Player("Snehamoy", "X");
   const _player2 = Player("Futuman", "O");
   const _gameController = GameController(_player1, _player2);
 
+  const _createCellButton = () => {
+    const button = document.createElement("button");
+    const markerDiv = document.createElement("div");
+
+    button.setAttribute("type", "button");
+    button.setAttribute("title", "mark this cell");
+    button.classList.add("game-board__cell");
+    markerDiv.classList.add("marker");
+
+    button.append(markerDiv);
+    button.addEventListener("click", () => console.log("clicked!"));
+    return button;
+  };
+
   const renderGameBoard = () => {
     const gameBoard = _gameController.getGameBoard();
-    console.log(gameBoard);
+    const gameBoardDiv = document.querySelector("#game-board");
+    const gameBoardFragment = new DocumentFragment(); // creates a virtual gameboard
+
+    gameBoard.forEach((row) =>
+      row.forEach((column) => {
+        gameBoardFragment.append(_createCellButton());
+      })
+    );
+
+    gameBoardDiv.append(gameBoardFragment);
   };
 
   const renderEndScreen = (containerEl, msgEl, restartBtnEl) => {
     console.log("The winner is " + _gameController.getCurrentPlayer());
   };
 
-  return {
-    gameBoard: renderGameBoard,
-    endScreen: renderEndScreen,
-  };
+  // render board on page load
+  renderGameBoard();
+
+  return {};
 };
+
+UIController();
