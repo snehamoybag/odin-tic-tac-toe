@@ -137,7 +137,8 @@ header {
   transition: transform 200ms ease;
 }
 
-.marker:hover {
+.marker:hover,
+.marker:checked {
   cursor: pointer;
   transform: scale(1.1);
   opacity: 1;
@@ -163,7 +164,9 @@ header {
 }
 
 .marker--cross:hover::before,
-.marker--cross:hover::after {
+.marker--cross:hover::after,
+.marker--cross:checked:before,
+.marker--cross:checked:after {
   --marker-color: hsl(var(--clr-secondary-400));
 }
 
@@ -192,14 +195,14 @@ header {
   outline-offset: calc(0px - (var(--marker-thickness) + 1px));
 }
 
-.marker--circle:hover::before {
+.marker--circle:hover::before,
+.marker--circle:checked:before {
   --marker-color: hsl(var(--clr-primary-400));
 }
 
-.marker .marker__radio {
+.marker--radio {
   appearance: none;
   margin: 0;
-  outline: none;
 }
 
 /* Hiding class, making content visible only to screen readers but not visually */
