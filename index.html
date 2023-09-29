@@ -31,7 +31,9 @@
     <main>
       <div class="container">
         <dialog id="welcome-screen" class="welcome-screen">
-          <h2 class="welcome-screen__title">Please Select Marker</h2>
+          <h2 class="welcome-screen__title" tabindex="1">
+            Please Select Marker
+          </h2>
           <p class="welcome-screen__markers-wrapper">
             <label for="marker-cross" class="marker__label">
               <span class="sr-only">cross</span>
@@ -41,7 +43,7 @@
                 id="marker-cross"
                 value="x"
                 class="marker marker--radio marker--cross"
-                required
+                checked
               />
             </label>
             <label for="marker-circle" class="marker__label">
