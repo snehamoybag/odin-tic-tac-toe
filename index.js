@@ -10,6 +10,8 @@ const Player = (name, marker) => {
   return {
     name,
     marker,
+    setSelections,
+    getSelections,
   };
 };
 
@@ -33,7 +35,7 @@ const Cell = (id) => {
 };
 
 const GameBoard = () => {
-  const _gameBoard = [];
+  const _board = [];
 
   const _addCells = () => {
     const ROWS = 3;
@@ -41,11 +43,11 @@ const GameBoard = () => {
     let cellId = 0;
 
     for (let i = 0; i < ROWS; i++) {
-      _gameBoard.push([]);
+      _board.push([]);
 
       for (let j = 0; j < COLUMNS; j++) {
         cellId++;
-        _gameBoard[i].push(Cell(cellId));
+        _board[i].push(Cell(cellId));
       }
     }
   };
@@ -60,8 +62,7 @@ const GameBoard = () => {
     return emptyCells;
   };
 
-  const placeMarker = (row, column, marker) => {
-    const selectedCell = _board[row][column];
+  const placeMarker = (selectedCell, marker) => {
     selectedCell.setMarker(marker);
   };
 
@@ -76,8 +77,8 @@ const GameBoard = () => {
 };
 
 // has all the core funtionalities and logic for the game
-const GameController = () => {
-  const _gameboard = GameBoard();
+const GameController = (player1, player2) => {
+  const _gameBoard = GameBoard();
   let _currentPlayer = player1;
 
   const getCurrentPlayer = () => _currentPlayer;
@@ -119,19 +120,19 @@ const GameController = () => {
     return matchedCombo === true;
   };
 
-  const _checkDraw = () => _board.getEmptyCells().length < 1;
+  const _checkDraw = () => _gameBoard.getEmptyCells().length < 1;
 
-  const playRound = (row, column) => {
-    const chosenCell = _board[row][column];
-    const isCellAvailable = chosenCell.getMarker() === false;
+  const playRound = (cellObj) => {
+    const chosenCell = cellObj;
+    const isCellTaken = Boolean(chosenCell.getMarker());
     let roundResult;
 
-    if (!isCellAvailable) {
+    if (isCellTaken) {
       roundResult = "cell already taken";
       return roundResult;
     }
 
-    _gameboard.placeMarker(row, column, _currentPlayer.marker);
+    _gameBoard.placeMarker(chosenCell, _currentPlayer.marker);
     _currentPlayer.setSelections(chosenCell.getId());
 
     const isWin = _checkWin();
@@ -155,18 +156,16 @@ const GameController = () => {
   };
 
   return {
-    gameBoard: _gameboard.getBoard,
+    getBoard: _gameBoard.getBoard,
     getCurrentPlayer,
     playRound,
   };
 };
 
-// has all the displaying related funtionalities
-const ScreenController = (player1, player2) => {};
-
-// game implemnetation
-const startGame = (formEl) => {
+// handales dom related stuffs
+const screenController = (() => {
   const _getPlayers = () => {
+    const formEl = document.querySelector("#welcome-screen");
     let player1Name;
     let player2Name;
     let player1Marker;
@@ -198,10 +197,61 @@ const startGame = (formEl) => {
     };
   };
 
-  const _players = _getPlayers();
-  const _player1 = _players.player1;
-  const _player2 = _players.player2;
-  const _screenController = ScreenController(_player1, _player2);
+  const players = _getPlayers();
+  const player1 = Player(players.player1.name, players.player1.marker);
+  const player2 = Player(players.player2.name, players.player2.marker);
+  const _gameController = GameController(player1, player2);
+
+  const _createCellEl = (id) => {
+    const cellBtn = document.createElement("button");
+    const markerDiv = document.createElement("div");
+    const srOnlyEl = document.createElement("span");
+
+    cellBtn.setAttribute("type", "button");
+    cellBtn.setAttribute("id", `cell-${id}`);
+
+    cellBtn.classList.add("game-board__cell");
+    srOnlyEl.classList.add("sr-only");
+    srOnlyEl.textContent = "Mark this cell";
+    markerDiv.classList.add("marker");
+
+    cellBtn.append(srOnlyEl, markerDiv);
+
+    return cellBtn;
+  };
+
+  const _playRound = (cellObj) => {
+    // play a round
+    const roundResult = _gameController.playRound(cellObj);
+    console.log(roundResult);
+  };
+
+  const renderGameBoardEl = () => {
+    const gameBoarDiv = document.querySelector("#game-board");
+    const gameBoardFragment = new DocumentFragment();
+    const board = _gameController.getBoard();
+
+    board.forEach((row) =>
+      row.forEach((cell) => {
+        const cellEl = _createCellEl(cell.getId());
+
+        cellEl.addEventListener("click", () => _playRound(cell));
+
+        gameBoardFragment.append(cellEl);
+      })
+    );
+
+    gameBoarDiv.append(gameBoardFragment);
+  };
+
+  return {
+    renderGameBoardEl,
+  };
+})();
+
+// game implemnetation
+const startGame = () => {
+  screenController.renderGameBoardEl();
 };
 
 const welcomeScreen = document.querySelector("#welcome-screen");
@@ -210,4 +260,7 @@ const startGameBtn = welcomeScreen.querySelector("#start-game-btn");
 // on pageload render welcome screen
 welcomeScreen.showModal();
 
-startGameBtn.addEventListener("click", () => startGame(welcomeScreen));
+startGameBtn.addEventListener("click", () => {
+  welcomeScreen.close(); //close modal
+  startGame();
+});
