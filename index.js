@@ -76,13 +76,13 @@ const GameBoard = () => {
 };
 
 // has all the core funtionalities and logic for the game
-const GameController = (player1, player2) => {
+const GameController = () => {
   const _gameboard = GameBoard();
   let _currentPlayer = player1;
 
   const getCurrentPlayer = () => _currentPlayer;
 
-  const switchCurrentPlayer = () => {
+  const _switchCurrentPlayer = () => {
     _currentPlayer = _currentPlayer === player1 ? player2 : player1;
   };
 
@@ -119,6 +119,8 @@ const GameController = (player1, player2) => {
     return matchedCombo === true;
   };
 
+  const _checkDraw = () => _board.getEmptyCells().length < 1;
+
   const playRound = (row, column) => {
     const chosenCell = _board[row][column];
     const isCellAvailable = chosenCell.getMarker() === false;
@@ -132,19 +134,75 @@ const GameController = (player1, player2) => {
     _gameboard.placeMarker(row, column, _currentPlayer.marker);
     _currentPlayer.setSelections(chosenCell.getId());
 
-    //check for win
-    const isWin = checkWin(_currentPlayer);
-    // if check for win fails, check for draw
+    const isWin = _checkWin();
+    const isDraw = _checkDraw();
 
-    // if check for draw fails, switch the player
+    if (isWin) {
+      roundResult = "win";
+      return roundResult;
+    }
+
+    if (!isWin && isDraw) {
+      roundResult = "draw";
+      return roundResult;
+    }
+
+    if (!isDraw && !isDraw) {
+      roundResult = "round complete";
+      _switchCurrentPlayer();
+      return roundResult;
+    }
+  };
+
+  return {
+    gameBoard: _gameboard.getBoard,
+    getCurrentPlayer,
+    playRound,
   };
 };
 
 // has all the displaying related funtionalities
-const ScreenController = () => {};
+const ScreenController = (player1, player2) => {};
 
 // game implemnetation
-const startGame = () => {};
+const startGame = (formEl) => {
+  const _getPlayers = () => {
+    let player1Name;
+    let player2Name;
+    let player1Marker;
+    let player2Marker;
+
+    player1Marker = formEl.querySelector(
+      "input[name=player1-marker]:checked"
+    ).value;
+
+    if (player1Marker === "cross") {
+      player1Name = "Player X";
+      player2Name = "Player O";
+      player2Marker = "circle";
+    } else if (player1Marker === "circle") {
+      player1Name = "Player O";
+      player2Name = "Player X";
+      player2Marker = "cross";
+    }
+
+    return {
+      player1: {
+        name: player1Name,
+        marker: player1Marker,
+      },
+      player2: {
+        name: player2Name,
+        marker: player2Marker,
+      },
+    };
+  };
+
+  const _players = _getPlayers();
+  const _player1 = _players.player1;
+  const _player2 = _players.player2;
+  const _screenController = ScreenController(_player1, _player2);
+};
 
 const welcomeScreen = document.querySelector("#welcome-screen");
 const startGameBtn = welcomeScreen.querySelector("#start-game-btn");
@@ -152,4 +210,4 @@ const startGameBtn = welcomeScreen.querySelector("#start-game-btn");
 // on pageload render welcome screen
 welcomeScreen.showModal();
 
-startGameBtn.addEventListener("click", startGame);
+startGameBtn.addEventListener("click", () => startGame(welcomeScreen));
