@@ -55,9 +55,15 @@ const GameBoard = () => {
   const getBoard = () => _board;
 
   const getEmptyCells = () => {
-    const emptyCells = _board
-      .filter((row) => row.filter((column) => column.getMarker())) // returns rows that has empty columns/cells
-      .map((row) => row[column]); // returns only the empty columns/cells
+    const emptyCells = [];
+
+    for (let i = 0; i < _board.length; i++) {
+      for (let j = 0; j < _board[i].length; j++) {
+        const currentColumn = _board[i][j];
+
+        if (!currentColumn.getMarker()) emptyCells.push(currentColumn);
+      }
+    }
 
     return emptyCells;
   };
@@ -120,7 +126,9 @@ const GameController = (player1, player2) => {
     return matchedCombo === true;
   };
 
-  const _checkDraw = () => _gameBoard.getEmptyCells().length < 1;
+  const _checkDraw = () => {
+    _gameBoard.getEmptyCells();
+  };
 
   const playRound = (cellObj) => {
     const chosenCell = cellObj;
