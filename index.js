@@ -164,7 +164,7 @@ const GameController = (player1, player2) => {
 };
 
 // handales dom related stuffs
-const screenController = (() => {
+const ScreenController = () => {
   const _getPlayers = () => {
     const formEl = document.querySelector("#welcome-screen");
     let player1Name;
@@ -175,6 +175,8 @@ const screenController = (() => {
     player1Marker = formEl.querySelector(
       "input[name=player1-marker]:checked"
     ).value;
+
+    console.log(player1Marker);
 
     if (player1Marker === "cross") {
       player1Name = "Player X";
@@ -228,6 +230,10 @@ const screenController = (() => {
     markerDiv.classList.add(`marker--${cellObj.getMarker()}`);
   };
 
+  const _renderEndScreen = (gameResult) => {
+    alert(gameResult);
+  };
+
   const _renderRound = (cellObj) => {
     // play a round
     const roundResult = _gameController.playRound(cellObj);
@@ -240,6 +246,11 @@ const screenController = (() => {
       case "win":
         _renderMarker(cellObj);
         _renderEndScreen("win");
+        break;
+      case "draw":
+        _renderMarker(cellObj);
+        _renderEndScreen("draw");
+        break;
     }
   };
 
@@ -275,10 +286,11 @@ const screenController = (() => {
     renderCurrentPlayerEl: updateCurrentPlayerEl,
     renderGameBoardEl,
   };
-})();
+};
 
 // game implemnetation
 const startGame = () => {
+  const screenController = ScreenController();
   screenController.renderCurrentPlayerEl();
   screenController.renderGameBoardEl();
 };
