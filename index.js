@@ -221,10 +221,33 @@ const screenController = (() => {
     return cellBtn;
   };
 
-  const _playRound = (cellObj) => {
+  const _renderMarker = (cellObj) => {
+    const cellBtn = document.querySelector(`#cell-${cellObj.getId()}`);
+    const markerDiv = cellBtn.querySelector(".marker");
+
+    markerDiv.classList.add(`marker--${cellObj.getMarker()}`);
+  };
+
+  const _renderRound = (cellObj) => {
     // play a round
     const roundResult = _gameController.playRound(cellObj);
     console.log(roundResult);
+
+    switch (roundResult) {
+      case "round complete":
+        _renderMarker(cellObj);
+        break;
+      case "win":
+        _renderMarker(cellObj);
+        _renderEndScreen("win");
+    }
+  };
+
+  const updateCurrentPlayerEl = () => {
+    const currentPlayerEl = document.querySelector("#current-player");
+    currentPlayerEl.textContent = `${
+      _gameController.getCurrentPlayer().name
+    }'s turn`;
   };
 
   const renderGameBoardEl = () => {
@@ -236,7 +259,10 @@ const screenController = (() => {
       row.forEach((cell) => {
         const cellEl = _createCellEl(cell.getId());
 
-        cellEl.addEventListener("click", () => _playRound(cell));
+        cellEl.addEventListener("click", () => {
+          _renderRound(cell);
+          updateCurrentPlayerEl();
+        });
 
         gameBoardFragment.append(cellEl);
       })
@@ -246,12 +272,14 @@ const screenController = (() => {
   };
 
   return {
+    renderCurrentPlayerEl: updateCurrentPlayerEl,
     renderGameBoardEl,
   };
 })();
 
 // game implemnetation
 const startGame = () => {
+  screenController.renderCurrentPlayerEl();
   screenController.renderGameBoardEl();
 };
 
