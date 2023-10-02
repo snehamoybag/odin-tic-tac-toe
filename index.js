@@ -57,11 +57,9 @@ const GameBoard = () => {
   const getEmptyCells = () => {
     const emptyCells = [];
 
-    for (let i = 0; i < _board.length; i++) {
-      for (let j = 0; j < _board[i].length; j++) {
-        const currentColumn = _board[i][j];
-
-        if (!currentColumn.getMarker()) emptyCells.push(currentColumn);
+    for (const row of _board) {
+      for (const column of row) {
+        if (!column.getMarker()) emptyCells.push(column);
       }
     }
 
