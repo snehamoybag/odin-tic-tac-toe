@@ -176,8 +176,6 @@ const ScreenController = () => {
       "input[name=player1-marker]:checked"
     ).value;
 
-    console.log(player1Marker);
-
     if (player1Marker === "cross") {
       player1Name = "Player X";
       player2Name = "Player O";
@@ -230,14 +228,9 @@ const ScreenController = () => {
     markerDiv.classList.add(`marker--${cellObj.getMarker()}`);
   };
 
-  const _renderEndScreen = (gameResult) => {
-    alert(gameResult);
-  };
-
   const _renderRound = (cellObj) => {
     // play a round
     const roundResult = _gameController.playRound(cellObj);
-    console.log(roundResult);
 
     switch (roundResult) {
       case "round complete":
@@ -266,20 +259,38 @@ const ScreenController = () => {
     const gameBoardFragment = new DocumentFragment();
     const board = _gameController.getBoard();
 
+    // remove previous board before adding a new one
+    gameBoarDiv.innerHTML = "";
+
     board.forEach((row) =>
       row.forEach((cell) => {
         const cellEl = _createCellEl(cell.getId());
 
-        cellEl.addEventListener("click", () => {
-          _renderRound(cell);
-          updateCurrentPlayerEl();
-        });
+        cellEl.addEventListener(
+          "click",
+          () => {
+            _renderRound(cell);
+            updateCurrentPlayerEl();
+          },
+          { once: true }
+        );
 
         gameBoardFragment.append(cellEl);
       })
     );
 
     gameBoarDiv.append(gameBoardFragment);
+  };
+
+  const _renderEndScreen = (gameResult) => {
+    const endScreenModal = document.querySelector("#end-screen");
+    const endScreenTitleEl = endScreenModal.querySelector(".end-screen__title");
+    const currenPlayerName = _gameController.getCurrentPlayer().name;
+
+    endScreenTitleEl.textContent =
+      gameResult === "win" ? `${currenPlayerName} Wins!` : "It's a Draw";
+
+    endScreenModal.showModal();
   };
 
   return {
@@ -295,8 +306,14 @@ const startGame = () => {
   screenController.renderGameBoardEl();
 };
 
+const restartGame = () => {
+  startGame();
+};
+
 const welcomeScreen = document.querySelector("#welcome-screen");
 const startGameBtn = welcomeScreen.querySelector("#start-game-btn");
+const endScreenModal = document.querySelector("#end-screen");
+const restartGameBtn = endScreenModal.querySelector("#restart-game-btn");
 
 // on pageload render welcome screen
 welcomeScreen.showModal();
@@ -304,4 +321,10 @@ welcomeScreen.showModal();
 startGameBtn.addEventListener("click", () => {
   welcomeScreen.close(); //close modal
   startGame();
+});
+
+restartGameBtn.addEventListener("click", () => {
+  endScreenModal.close();
+  restartGame();
+  welcomeScreen.showModal();
 });

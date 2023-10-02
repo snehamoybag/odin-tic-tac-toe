@@ -76,7 +76,7 @@ header {
   margin-top: 2rem;
 }
 
-.welcome-screen {
+.modal {
   min-width: 250px;
   text-align: center;
   color: inherit; /* inherit body color */
@@ -89,7 +89,7 @@ header {
   transform: translate(-50%, -50%);
 }
 
-.welcome-screen::backdrop {
+.modal::backdrop {
   background: hsla(0, 0%, 0%, 0.5);
 }
 
@@ -105,41 +105,27 @@ header {
   margin-top: 0.75rem;
 }
 
-.welcome-screen__start-btn {
-  padding: 0.75em 1.75em;
-  background-color: hsl(var(--clr-primary-400));
-  color: hsla(var(--clr-neutral-100));
-  font-weight: var(--fw-semi-bold);
-  border: none;
-  border-radius: 5px;
-  box-shadow: 0 5px 5px hsla(0, 0%, 0%, 0.1);
-  transition: transform 200ms ease;
-  margin-top: 1.5rem;
-}
-
-.welcome-screen__start-btn:hover {
-  cursor: pointer;
-  opacity: 0.9;
-}
-
-.welcome-screen__start-btn:active {
-  transform: scale(0.97);
-  box-shadow: none;
-}
-
 .game-board {
   --size: 300px;
+  --cell-border-thickness: 2px;
   width: var(--size);
   height: var(--size);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
+  /* hide outer borders of cells */
+  outline: var(--cell-border-thickness) solid hsla(var(--clr-neutral-100)); /* has to be same color as background */
+  outline-offset: calc(0px - var(--cell-border-thickness));
 }
 
 .game-board__cell {
   background-color: transparent;
   padding: 0;
-  border: 2px solid hsl(var(--clr-primary-700));
+  border: var(--cell-border-thickness) solid hsl(var(--clr-primary-700));
+}
+
+.game-board__cell:hover {
+  cursor: pointer;
 }
 
 .marker {
@@ -223,6 +209,28 @@ header {
 .marker--radio {
   appearance: none;
   margin: 0;
+}
+
+.btn--primary {
+  padding: 0.75em 1.75em;
+  background-color: hsl(var(--clr-primary-400));
+  color: hsla(var(--clr-neutral-100));
+  font-weight: var(--fw-semi-bold);
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 5px 5px hsla(0, 0%, 0%, 0.1);
+  transition: transform 200ms ease;
+  margin-top: 1.5rem;
+}
+
+.btn--primary:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.btn--primary:active {
+  transform: scale(0.97);
+  box-shadow: none;
 }
 
 /* Hiding class, making content visible only to screen readers but not visually */

@@ -30,7 +30,7 @@
     </header>
     <main>
       <div class="container">
-        <dialog id="welcome-screen" class="welcome-screen">
+        <dialog id="welcome-screen" class="welcome-screen modal">
           <h2 class="welcome-screen__title" tabindex="1">
             Please Select Marker
           </h2>
@@ -57,17 +57,18 @@
               />
             </label>
           </p>
-          <button
-            type="button"
-            id="start-game-btn"
-            class="welcome-screen__start-btn"
-          >
+          <button type="button" id="start-game-btn" class="btn--primary">
             Start Game
           </button>
         </dialog>
         <h2 id="current-player" class="current-player"></h2>
         <div id="game-board" class="game-board"></div>
-        <div id="end-screen" class="end-screen hidden"></div>
+        <dialog id="end-screen" class="end-screen modal">
+          <h2 class="end-screen__title" tabindex="1"></h2>
+          <button type="button" id="restart-game-btn" class="btn--primary">
+            Play Again
+          </button>
+        </dialog>
       </div>
     </main>
     <footer></footer>
