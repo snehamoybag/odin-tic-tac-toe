@@ -106,28 +106,23 @@ const GameController = (player1, player2) => {
     ];
     const currentPlayerSelections = _currentPlayer.getSelections();
 
-    const matchedCombo = WIN_COMBOS.filter((combo) => {
-      // check if the current player selections has all the ids of current combo
-      let areAllMatchFound = false;
+    // player doesn't have all the winning combos, if they don't have 3 selections
+    if (currentPlayerSelections.length < 3) return false;
 
-      for (let i = 0; i < combo.length; i++) {
-        if (!currentPlayerSelections.includes(combo[i])) {
-          // immediately return and break loop if the combo number is not present in user selections
-          areAllMatchFound = false;
-          return areAllMatchFound;
-        }
+    // check if a winning combo is present in the player selection
+    for (const winCombo of WIN_COMBOS) {
+      if (winCombo.every((num) => currentPlayerSelections.includes(num))) {
+        return true; // player has a winning combo
       }
+    }
 
-      // only runs if the loop completes looping
-      areAllMatchFound = true;
-      return areAllMatchFound;
-    })[0];
-
-    return matchedCombo === true;
+    // if loop completes, no match was found
+    return false; // player doesn't have a winnig combo
   };
 
   const _checkDraw = () => {
-    _gameBoard.getEmptyCells();
+    const isDraw = _gameBoard.getEmptyCells().length < 1;
+    return isDraw;
   };
 
   const playRound = (cellObj) => {
