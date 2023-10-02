@@ -104,7 +104,7 @@ const GameController = (player1, player2) => {
     ];
     const currentPlayerSelections = _currentPlayer.getSelections();
 
-    // player doesn't have all the winning combos, if they don't have 3 selections
+    // player doesn't have all the winning combos if they don't have 3 selections
     if (currentPlayerSelections.length < 3) return false;
 
     // check if a winning combo is present in the player selection
@@ -149,7 +149,7 @@ const GameController = (player1, player2) => {
       return roundResult;
     }
 
-    if (!isDraw && !isDraw) {
+    if (!isWin && !isDraw) {
       roundResult = "round complete";
       _switchCurrentPlayer();
       return roundResult;
